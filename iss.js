@@ -1,14 +1,18 @@
 //hacking into the space station
 
-var iss = require('iss');
- 
 
-var stream = iss.locationStream(25544, 10);
- 
-stream.on('data', function (buffer) {
-    var rawJson = buffer.toString('utf8'),
-        data    = JSON.parse(rawJson);
-    console.log();
-    console.log('Latitude: ' + data.latitude.toFixed(2));
-    console.log('Longitude: ' + data.longitude.toFixed(2));
+var url = "http://api.open-notify.org/iss-now.json";
+
+var request = require("request");
+
+request(url, function(error, response) {
+    if (error) {
+        console.log("Ya goofed up!");
+        
+    } else {
+        var parsed = JSON.parse(response.body);
+        console.log(parseFloat(parsed.iss_position.latitude));
+        console.log(parseFloat(parsed.iss_position.longitude));
+        
+    }
 });
